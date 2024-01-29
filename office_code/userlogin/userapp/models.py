@@ -7,24 +7,24 @@ from django.dispatch import receiver
 
 class UserLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    login_time = models.DateTimeField(auto_now = True)
+    login_time = models.DateTimeField(null=True, blank=True)
     logout_time = models.DateTimeField(null=True, blank=True)
     total_time_spent = models.DurationField(null=True, blank=True)
 
     def __str__(self) :
         return f"{self.user}"
     
-@receiver(user_logged_in)
-def user_logged_in(sender,request,user,**kwargs):
-    UserLog.objects.create(user=user)
+# @receiver(user_logged_in)
+# def user_logged_in(sender,request,user,**kwargs):
+#     UserLog.objects.create(user=user)
 
 
-@receiver(user_logged_out)
-def user_logged_out(sender,request,user, **kwargs):
-    user_log=UserLog.objects.filter(user=user,logout_timeis_null=True).first()
-    if user_log:
-        user_log.logout_time=user_log.login_time
-        user_log.save()
+# @receiver(user_logged_out)
+# def user_logged_out(sender,request,user, **kwargs):
+#     user_log=UserLog.objects.filter(user=user,logout_timeis_null=True).first()
+#     if user_log:
+#         user_log.logout_time=user_log.login_time
+#         user_log.save()
 
 # @receiver(user_logged_in)
 # def user_logged_in(sender, instance, created, **kwargs) :
@@ -41,10 +41,10 @@ def user_logged_out(sender,request,user, **kwargs):
 # post_save.connect(user_logged_in,sender=User)
 # post_save.connect(user_logged_out,sender=User)
 
-@receiver(pre_save, sender=UserLog)
-def calculate_total_time_spent(sender, instance, **kwargs):
-    if instance.logout_time and instance.login_time:
-        instance.total_time_spent = instance.logout_time - instance.login_time
+# @receiver(pre_save, sender=UserLog)
+# def calculate_total_time_spent(sender, instance, **kwargs):
+#     if instance.logout_time and instance.login_time:
+#         instance.total_time_spent = instance.logout_time - instance.login_time
 
 
 # class UserLog(models.Model):

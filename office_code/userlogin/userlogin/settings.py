@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'userapp',
     'crispy_forms',
     "crispy_bootstrap4",
-      'django_login_history2'
+      'django_login_history2',
+      'login_history'
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 

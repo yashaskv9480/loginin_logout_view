@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 from django.shortcuts import render, get_object_or_404
 from .models import UserLog
 
-
 def registerpage(request):
     if request.user.is_authenticated:
         return redirect('/home')
@@ -38,15 +37,15 @@ def loginpage(request):
             user=authenticate(username=username,password=password)
             if user is not None:
                 login(request,user)
-
                 request.session['login_time'] = datetime.now().isoformat()
-
                 return redirect('/home')
             else:
                 messages.info(request,'username or password is incorrect!!!')
         return render(request,"login.html")
 
 def logoutuser(request):
+    last_login_time = request.session.get('login_time')  
+    UserLog.objects.create(user=request.user, login_time=last_login_time, logout_time=datetime.now())
     logout(request)
     return redirect('/login')
 
@@ -79,8 +78,6 @@ def view_user_logs(request,user_id):
     }
 
     return render(request, 'view_user_logs.html', context)
-
-
 
 
 
